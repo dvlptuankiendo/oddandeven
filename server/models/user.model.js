@@ -1,10 +1,16 @@
-const mongoose = require("mongoose");
-const { DEPOSIT, WITHDRAW, MOMO, THESIEURE } = require("../utils/constants");
+import mongoose from 'mongoose'
+import { DEPOSIT, WITHDRAW, MOMO, THESIEURE } from '../utils/constants.js'
 
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  email: {
+  account: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  displayName: {
     type: String,
     required: true,
     trim: true,
@@ -37,4 +43,4 @@ const schema = new Schema({
 
 const User = mongoose.model("User", schema);
 
-module.exports = User;
+export default User;

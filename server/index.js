@@ -1,23 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import cookieParser from 'cookie-parser';
-require('dotenv').config();
+import dotenv from 'dotenv'
 
-// declare extend properties
-declare global {
-  namespace Express {
-    interface Request {
-      userId: string;
-      userEmail: string;
-      roles: string[];
-    }
-  }
-}
+import routes from './routes/index.js'
+
+dotenv.config();
 
 // connect mongodb using mongoose
 const uri = process.env.MONGO_URI;
-mongoose.connect(uri as string, { autoIndex: true, autoCreate: true });
+mongoose.connect(uri, { autoIndex: true, autoCreate: true });
 
 const connection = mongoose.connection;
 connection.once('open', () =>
@@ -37,15 +29,12 @@ const corsConfig = {
 };
 app.use(cors(corsConfig));
 
-// cookies
-app.use(cookieParser());
-
 app.get('/', (req, res) => res.send('Express + TypeScript Server'));
 
 const port = process.env.PORT || 8888
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-  })
+  console.log(`Example app listening at http://localhost:${port}`)
+})
 
-// app.use('/api', routes);
+app.use('/api', routes);

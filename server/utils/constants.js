@@ -1,19 +1,8 @@
-const LOWHIGH = "LOWHIGH";
-const EVENODD = "EVENODD";
-const MOMO = "MOMO";
-const THESIEURE = "THESIEURE";
-const DEPOSIT = "DEPOSIT";
-const WITHDRAW = "WITHDRAW";
-const WIN = "WIN";
-const LOSE = "LOSE";
-
-module.exports = {
-  LOWHIGH,
-  EVENODD,
-  MOMO,
-  THESIEURE,
-  DEPOSIT,
-  WITHDRAW,
-  WIN,
-  LOSE,
-};
+export const LOWHIGH = "LOWHIGH";
+export const EVENODD = "EVENODD";
+export const MOMO = "MOMO";
+export const THESIEURE = "THESIEURE";
+export const DEPOSIT = "DEPOSIT";
+export const WITHDRAW = "WITHDRAW";
+export const WIN = "WIN";
+export const LOSE = "LOSE";
