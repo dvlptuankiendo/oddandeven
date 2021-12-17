@@ -11,10 +11,9 @@ const logIn = async (account, password) => {
   if (!passed) throw new Error('Bad credential');
 
   const data = {
-    _id: user._id,
+    userId: user._id,
     account: user.account,
     displayName: user.displayName,
-    amount: user.amount
   };
 
   const accessToken = jwt.sign(
