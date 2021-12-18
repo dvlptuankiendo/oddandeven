@@ -41,7 +41,22 @@ const register = async (username, password) => {
   return { id: newUser._id };
 };
 
+const getInfo = async (token) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+  const userInfo = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+
+  const user = await User.findOne({ _id: userInfo.userId }).lean();
+  if (!user) throw new Error("User doesn't exist");
+
+  return {
+    userId: user._id,
+    username: user.username,
+    amount: user.amount,
+  };
+};
+
 export default {
   logIn,
   register,
+  getInfo,
 };

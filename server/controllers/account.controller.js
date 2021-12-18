@@ -20,7 +20,19 @@ const register = async (req, res) => {
   }
 };
 
+const getInfo = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) throw new Error("Bad credential");
+    const result = accountService.getInfo(token);
+    res.status(200).send(result);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
 export default {
   logIn,
   register,
+  getInfo,
 };
