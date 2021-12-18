@@ -17,7 +17,11 @@ const createABet = async (userId, type, chosenOption, amount) => {
 
     if (!amount || amount < MIN_BET_AMOUNT) throw new Error(`Amount must be greater than or equal to ${MIN_BET_AMOUNT}$`);
 
+    if (existUser.amount < amount) throw new Error(`Amount of account is currently lower than ${MIN_BET_AMOUNT}$`);
+
     //logic prevent creating a bet at last 15 seconds or when calculating result ???
+
+    await User.findByIdAndUpdate(existUser._id, { amount: existUser.amount - amount })
 
     const newBet = new Bet({
         userId,
@@ -34,7 +38,14 @@ const cancelABet = async (userId, betId) => {
     const existPendingBet = await Bet.findOne({ _id: betId, userId, status: { $nin: [WIN, LOSE] } }).lean();
     if (!existPendingBet) throw new Error("No pending bet exist");
 
+    const existUser = await User.findOne({ _id: userId }).lean();
+    if (!existUser) throw new Error("User is not exist");
+
+    const { amount } = existPendingBet
+
     await Bet.findByIdAndDelete(betId);
+
+    await User.findByIdAndUpdate(existUser._id, { amount: existUser.amount + amount })
 
     return { id: existPendingBet._id };
 }
