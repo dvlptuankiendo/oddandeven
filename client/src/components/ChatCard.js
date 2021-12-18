@@ -57,9 +57,9 @@ const ChatCard = () => {
     }
 
     await messageStore.doc(messageId).update({
-      sender: user.username,
+      sender: (user && user.username) || "Anonymous",
       text: message,
-      amount: user.amount,
+      amount: (user && user.amount) || "",
     });
 
     setMessage("");
@@ -80,7 +80,9 @@ const ChatCard = () => {
               className="d-flex align-items-center"
               style={{
                 justifyContent:
-                  item.sender === user.username ? "flex-end" : "flex-start",
+                  user && item.sender === user.username
+                    ? "flex-end"
+                    : "flex-start",
               }}
             >
               <div className="mb-2 message-item">

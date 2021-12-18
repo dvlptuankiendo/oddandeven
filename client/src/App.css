@@ -76,3 +76,18 @@
   padding: 4px 8px;
   display: inline-block;
 }
+
+.bet-container {
+  position: relative;
+}
+
+.bet-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 99;
+  margin: -20px;
+}
