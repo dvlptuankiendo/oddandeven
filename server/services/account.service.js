@@ -5,10 +5,10 @@ import User from "../models/user.model.js";
 
 const logIn = async (username, password) => {
   const user = await User.findOne({ username }).lean();
-  if (!user) throw new Error("Bad credential");
+  if (!user) throw new Error("Thông tin không hợp lệ");
 
   const passed = passwordHash.verify(password, user.password);
-  if (!passed) throw new Error("Bad credential");
+  if (!passed) throw new Error("Thông tin không hợp lệ");
 
   const data = {
     userId: user._id,
@@ -27,10 +27,10 @@ const register = async (username, password) => {
   const isLostInfo =
     !username || !username.trim() || !password || !password.trim();
 
-  if (!!isLostInfo) throw new Error("Please provide your information");
+  if (!!isLostInfo) throw new Error("Vui lòng cung cấp đủ tên đăng nhập và mật khẩu");
 
   const existedUser = await User.findOne({ username }).lean();
-  if (!!existedUser) throw new Error("Username was taken");
+  if (!!existedUser) throw new Error("Tên đăng nhập đã được sử dụng");
 
   const newUser = new User({
     username,
@@ -46,7 +46,7 @@ const getInfo = async (token) => {
   const userInfo = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET_KEY);
 
   const user = await User.findOne({ _id: userInfo.userId }).lean();
-  if (!user) throw new Error("User doesn't exist");
+  if (!user) throw new Error("Người dùng không tồn tại");
 
   return {
     userId: user._id,
