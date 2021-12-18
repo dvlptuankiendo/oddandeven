@@ -4,20 +4,20 @@ import Bet from "../models/bet.model.js";
 
 const createABet = async (userId, type, chosenOption, amount) => {
     const existUser = await User.findOne({ _id: userId }).lean();
-    if (!existUser) throw new Error("User is not exist");
+    if (!existUser) throw new Error("Người dùng không tồn tại");
 
     //logic check if exist pending bet ???
 
-    if (![LOWHIGH, EVENODD].includes(type)) throw new Error("Bet type is not valid")
+    if (![LOWHIGH, EVENODD].includes(type)) throw new Error("Vui lòng chọn trò chơi")
 
     const invalidLowHigh = type === LOWHIGH && ![LOW, HIGH].includes(chosenOption)
     const invalidEvenOdd = type === EVENODD && ![EVEN, ODD].includes(chosenOption)
 
-    if (invalidLowHigh || invalidEvenOdd) throw new Error("Bet option is not valid")
+    if (invalidLowHigh || invalidEvenOdd) throw new Error("Lựa chọn không hợp lệ")
 
-    if (!amount || amount < MIN_BET_AMOUNT) throw new Error(`Amount must be greater than or equal to ${MIN_BET_AMOUNT}$`);
+    if (!amount || amount < MIN_BET_AMOUNT) throw new Error(`Số tiền đặt cược tối thiểu là ${MIN_BET_AMOUNT}$`);
 
-    if (existUser.amount < amount) throw new Error(`Amount of account is currently lower than ${MIN_BET_AMOUNT}$`);
+    if (existUser.amount < amount) throw new Error(`Số dư tài khoản hiện tại không đủ, vui lòng nạp thêm`);
 
     //logic prevent creating a bet at last 15 seconds or when calculating result ???
 
@@ -36,10 +36,10 @@ const createABet = async (userId, type, chosenOption, amount) => {
 
 const cancelABet = async (userId, betId) => {
     const existPendingBet = await Bet.findOne({ _id: betId, userId, status: { $nin: [WIN, LOSE] } }).lean();
-    if (!existPendingBet) throw new Error("No pending bet exist");
+    if (!existPendingBet) throw new Error("Lệnh cược không tồn tại ");
 
     const existUser = await User.findOne({ _id: userId }).lean();
-    if (!existUser) throw new Error("User is not exist");
+    if (!existUser) throw new Error("Người dùng không tồn tại");
 
     const { amount } = existPendingBet
 

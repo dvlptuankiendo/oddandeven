@@ -23,7 +23,7 @@ const register = async (req, res) => {
 const getInfo = async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    if (!token) throw new Error("Bad credential");
+    if (!token) throw new Error("Thông tin không hợp lệ");
     const result = await accountService.getInfo(token);
     res.status(200).send(result);
   } catch (err) {
