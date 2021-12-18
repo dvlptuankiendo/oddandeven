@@ -1,5 +1,6 @@
 * {
   font-family: Arial, Helvetica, sans-serif;
+  scroll-behavior: smooth;
 }
 
 .loading-container {
@@ -62,8 +63,16 @@
   text-align: center;
 }
 
-.box-chat {
-  height: 60vh;
+.message-list {
+  height: 50vh;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.message-item {
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #f2f2f2;
+  padding: 4px 8px;
+  display: inline-block;
 }
