@@ -11,10 +11,10 @@ const uri = process.env.MONGO_URI;
 mongoose.connect(uri, { autoIndex: true, autoCreate: true });
 
 const connection = mongoose.connection;
-connection.once("open", () =>
-  console.log("MongoDB database connected successfully!")
+connection.once("open", () => {
+  console.log("MongoDB database connected successfully!");
   seedData();
-);
+});
 
 const seedUser = async () => {
   console.log("init users...");
