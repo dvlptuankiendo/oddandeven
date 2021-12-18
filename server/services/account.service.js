@@ -13,6 +13,7 @@ const logIn = async (username, password) => {
   const data = {
     userId: user._id,
     username: user.username,
+    amount: user.amount,
   };
 
   const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET_KEY, {

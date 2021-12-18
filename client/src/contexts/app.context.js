@@ -3,6 +3,7 @@ import React, { useState, useEffect, createContext } from "react";
 export const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -24,7 +25,9 @@ export const AppContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ initialized, user, signOut }}>
+    <AppContext.Provider
+      value={{ initialized, user, isLoading, setIsLoading, setUser, signOut }}
+    >
       {children}
     </AppContext.Provider>
   );
