@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose"
 
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
   users: [
     {
-      userId: { type: String, required: true, trim: true },
+      userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
       amount: { type: Number, required: true },
     },
   ],
@@ -14,4 +14,4 @@ const schema = new Schema({
 
 const Ranking = mongoose.model("Ranking", schema);
 
-module.exports = Ranking;
+export default Ranking;
