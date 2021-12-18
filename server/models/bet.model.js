@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
-const { LOWHIGH, EVENODD, WIN, LOSE } = require("../utils/constants");
+import mongoose from "mongoose"
+import { LOWHIGH, EVENODD, WIN, LOSE } from "../utils/constants.js"
 
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  userId: { type: String, required: true, trim: true },
+  userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   type: { type: String, enum: [LOWHIGH, EVENODD] },
   amount: { type: Number, required: true },
   status: { type: String, enum: [WIN, LOSE] },
@@ -13,4 +13,4 @@ const schema = new Schema({
 
 const Bet = mongoose.model("Bet", schema);
 
-module.exports = Bet;
+export default Bet;
