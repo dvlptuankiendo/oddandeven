@@ -1,16 +1,10 @@
-import mongoose from 'mongoose'
-import { DEPOSIT, WITHDRAW, MOMO, THESIEURE } from '../utils/constants.js'
+import mongoose from "mongoose";
+import { DEPOSIT, WITHDRAW, MOMO, THESIEURE } from "../utils/constants.js";
 
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-  account: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
-  },
-  displayName: {
+  username: {
     type: String,
     required: true,
     trim: true,
