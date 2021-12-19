@@ -4,9 +4,11 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import http from "http";
 import { Server } from "socket.io";
+import cron from "cron";
 
 import routes from "./routes/index.js";
 import resultService from "./services/result.service.js";
+import rankingService from "./services/ranking.service.js";
 
 dotenv.config();
 
@@ -38,6 +40,7 @@ app.use("/api", routes);
 
 const server = http.createServer(app);
 
+// socket
 const socketIo = new Server(server, {
   cors: {
     origin: "*",
@@ -79,6 +82,17 @@ const countdown = () => {
 };
 
 countdown();
+
+// cron job
+const job = new cron.CronJob({
+  cronTime: "00 00 00 * * 0-6", // job runs at 0h00 everyday
+  onTick: async function () {
+    await rankingService.updateDailyRanking();
+  },
+  start: true,
+});
+
+job.start();
 
 const port = process.env.PORT || 8888;
 server.listen(port, () => {
