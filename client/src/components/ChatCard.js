@@ -1,33 +1,30 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { Button, Input, Form } from "reactstrap";
 import { FaUserAlt } from "react-icons/fa";
+import socketIOClient from "socket.io-client";
 
 import ContentCard from "./ContentCard";
-import firebase from "../configs/firebase";
 import { AppContext } from "../contexts/app.context";
 import { formatAmount } from "../utils/helpers";
-
-const messageStore = firebase.firestore().collection("Messages");
+import { host } from "../utils/constants";
 
 const ChatCard = () => {
+  const socketRef = useRef();
   const { user } = useContext(AppContext);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [messageId, setMessageId] = useState(null);
   const [newMessage, setNewMessage] = useState(null);
 
   useEffect(() => {
-    messageStore.onSnapshot((snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+    socketRef.current = socketIOClient.connect(host);
 
-      if (data[0]) {
-        !messageId && setMessageId(data[0].id);
-        setNewMessage(data[0]);
-      }
+    socketRef.current.on("newmessage", (data) => {
+      setNewMessage(data);
     });
+
+    return () => {
+      socketRef.current.disconnect();
+    };
   }, []);
 
   useEffect(() => {
@@ -47,19 +44,7 @@ const ChatCard = () => {
     if (!message || !message.trim()) return;
     setMessage("");
 
-    if (!messageId) {
-      const allMessages = await messageStore.get();
-      const docIds = allMessages.docs.map((doc) => doc.id);
-      docIds[0] && setMessageId(docIds[0]);
-      await messageStore.doc(docIds[0]).update({
-        sender: (user && user.username) || "Vô danh",
-        text: message,
-        amount: (user && user.amount) || "",
-      });
-      return;
-    }
-
-    await messageStore.doc(messageId).update({
+    socketRef.current.emit("message", {
       sender: (user && user.username) || "Anonymous",
       text: message,
       amount: (user && user.amount) || "",

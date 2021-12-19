@@ -48,13 +48,16 @@ socketIo.on("connection", (socket) => {
   ///Handle khi có connect từ client tới
   console.log("New client connected" + socket.id);
 
+  socket.on("message", (data) => {
+    socketIo.emit("newmessage", data);
+  });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
 });
 
 const TIME_PER_BET = 120;
-
 let count = TIME_PER_BET;
 let isProcessing = false;
 
