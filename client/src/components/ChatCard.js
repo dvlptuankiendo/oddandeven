@@ -36,7 +36,12 @@ const ChatCard = () => {
 
   useEffect(() => {
     const bottom = document.getElementById("message-list-bottom");
-    bottom && bottom.scrollIntoView();
+    bottom &&
+      bottom.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
   }, [messages]);
 
   const send = async (e) => {
