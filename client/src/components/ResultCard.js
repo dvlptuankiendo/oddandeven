@@ -1,9 +1,70 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import ContentCard from "./ContentCard";
 
+import { getResults } from "../services/api";
+import { AppContext } from "../contexts/app.context";
+
+const backgrounds = {
+  T: "success",
+  X: "danger",
+  C: "primary",
+  L: "warning",
+};
+
 const ResultCard = () => {
-  return <ContentCard title="KẾT QUẢ">Result card</ContentCard>;
+  const { setIsLoading } = useContext(AppContext);
+  const [results, setResults] = useState({
+    lastResult: null,
+    lowHighs: [],
+    evenOdds: [],
+  });
+
+  const getData = async () => {
+    setIsLoading(true);
+    try {
+      const res = await getResults();
+      setResults(res.data);
+    } catch (err) {
+      toast.error((err.response && err.response.data.message) || err.message);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  return (
+    <ContentCard title="KẾT QUẢ">
+      <div className="mb-2">
+        Kết quả trước đó: <b className="text-danger">{results.lastResult}</b>
+      </div>
+      <div className="d-flex align-items-center mb-2">
+        <span className="mr-2">CL:</span>
+        {results.evenOdds.map((item, index) => (
+          <div
+            key={index}
+            className={`d-flex align-items-center justify-content-center text-white bg-${backgrounds[item]} mr-1 result-item`}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+      <div className="d-flex align-items-center">
+        <span className="mr-2">TX:</span>
+        {results.lowHighs.map((item, index) => (
+          <div
+            key={index}
+            className={`d-flex align-items-center justify-content-center text-white bg-${backgrounds[item]} mr-1 result-item`}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+    </ContentCard>
+  );
 };
 
 export default ResultCard;

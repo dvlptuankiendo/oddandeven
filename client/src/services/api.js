@@ -35,3 +35,5 @@ export const signUp = (username, password) =>
   api.post("/api/v1/account/register", { username, password });
 
 export const getInfo = () => api.get("/api/v1/account/me");
+
+export const getResults = () => api.get("/api/v1/results");
