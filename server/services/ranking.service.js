@@ -6,6 +6,10 @@ import User from "../models/user.model.js";
 
 const { WIN, LOSE } = BET_STATUS;
 
+const rewards = [
+  500000000, 250000000, 100000000, 75000000, 50000000, 40000000, 30000000,
+];
+
 const getDailyRanking = async () => {
   const topUser = await Ranking.findOne()
     .sort({ createdAt: -1 })
@@ -16,7 +20,12 @@ const getDailyRanking = async () => {
     .select("users");
 
   const data = topUser.users.map((u, idx) => {
-    return { top: idx + 1, username: u.userId.username, amount: u.amount };
+    return {
+      top: idx + 1,
+      username: u.userId.username,
+      amount: u.amount,
+      reward: rewards[idx],
+    };
   });
 
   return data;
@@ -55,9 +64,6 @@ const updateDailyRanking = async () => {
     .sort((u1, u2) => (u1.amount < u2.amount ? 1 : -1))
     .slice(0, top);
 
-  const rewards = [
-    500000000, 250000000, 100000000, 75000000, 50000000, 40000000, 30000000,
-  ];
   for (let [index, item] of usersToBeInserted.entries()) {
     const { userId } = item;
     const user = await User.findOne({ _id: userId });

@@ -6,6 +6,7 @@ import ChatCard from "../components/ChatCard";
 import ResultCard from "../components/ResultCard";
 import BetCard from "../components/BetCard";
 import GuideModal from "../components/GuideModal";
+import DailyRanking from "../components/DailyRanking";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,13 +19,18 @@ const Home = () => {
         <Button color="primary" className="mb-3" onClick={toggle}>
           Hướng dẫn
         </Button>
-        <Row>
+        <Row className="mb-3">
           <Col md={6}>
             <ResultCard />
             <BetCard />
           </Col>
           <Col md={6}>
             <ChatCard />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <DailyRanking />
           </Col>
         </Row>
       </Container>

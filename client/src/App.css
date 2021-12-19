@@ -97,3 +97,7 @@
   width: 20px;
   border-radius: 50%;
 }
+
+.badge-icon {
+  width: 32px;
+}

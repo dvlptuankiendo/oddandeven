@@ -38,3 +38,5 @@ export const getResults = () => api.get("/api/v1/results");
 export const getActiveBetting = () => api.get("/api/v1/bet/active");
 
 export const createBet = (data) => api.post("/api/v1/bet/createABet", data);
+
+export const getRanking = () => api.get("/api/v1/ranking/daily");
