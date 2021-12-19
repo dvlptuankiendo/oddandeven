@@ -50,7 +50,7 @@ const DailyRanking = () => {
 
   return (
     <>
-      <h4 className="text-center">BẢNG XẾP HẠNG TRONG NGÀY HÔM QUA</h4>
+      <h4 className="text-center">BẢNG XẾP HẠNG TRONG NGÀY</h4>
       <Table size="sm" hover striped bordered responsive>
         <thead>
           <tr>
