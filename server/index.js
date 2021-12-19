@@ -52,10 +52,7 @@ socketIo.on("connection", (socket) => {
   let count = TIME_PER_BET;
   let isProcessing = false;
   const countdown = () => {
-    if (isProcessing) {
-      countdown();
-      return;
-    }
+    if (isProcessing) return;
     setTimeout(async () => {
       isProcessing = true;
       if (!count) {
