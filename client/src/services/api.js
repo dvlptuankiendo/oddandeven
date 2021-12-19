@@ -1,14 +1,11 @@
 import axios from "axios";
 
-export const ACCESS_TOKEN = "ACCESS_TOKEN";
-
-export const BASE_URL =
-  process.env.REACT_APP_BASE_URL || "http://localhost:8888";
+import { host, ACCESS_TOKEN } from "../utils/constants";
 
 export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN) || null;
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: host,
   timeout: 30000,
   headers: {
     "Content-Type": "application/json",

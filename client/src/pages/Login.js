@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import ContentContainer from "../layouts/ContentContainer";
 import { logIn } from "../services/api";
 import { AppContext } from "../contexts/app.context";
-import { ACCESS_TOKEN } from "../services/api";
+import { ACCESS_TOKEN } from "../utils/constants";
 
 const Login = () => {
   const { setIsLoading, setUser } = useContext(AppContext);

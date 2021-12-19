@@ -1,3 +1,7 @@
+export const host = process.env.REACT_APP_BASE_URL || "http://localhost:8888";
+
+export const ACCESS_TOKEN = "ACCESS_TOKEN";
+
 export const BET_TYPES = {
   EVENODDHIGHLOW: "EVENODDHIGHLOW",
   XIEN: "XIEN",

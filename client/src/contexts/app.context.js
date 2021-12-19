@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext } from "react";
 
-import { ACCESS_TOKEN, getAccessToken } from "../services/api";
+import { getAccessToken } from "../services/api";
+import { ACCESS_TOKEN } from "../utils/constants";
 import { getInfo } from "../services/api";
 
 export const AppContext = createContext();

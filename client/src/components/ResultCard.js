@@ -6,8 +6,7 @@ import ContentCard from "./ContentCard";
 
 import { getResults } from "../services/api";
 import { AppContext } from "../contexts/app.context";
-
-const host = "http://localhost:8888";
+import { host } from "../utils/constants";
 
 const backgrounds = {
   T: "success",
