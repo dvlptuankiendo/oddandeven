@@ -48,7 +48,6 @@ const socketIo = new Server(server, {
 });
 
 socketIo.on("connection", (socket) => {
-  ///Handle khi có connect từ client tới
   console.log("New client connected" + socket.id);
 
   socket.on("message", (data) => {

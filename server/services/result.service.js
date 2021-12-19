@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import Result from "../models/result.model.js";
 import Bet from "../models/bet.model.js";
 import User from "../models/user.model.js";
@@ -7,6 +9,7 @@ import {
   BET_TYPES,
   EVENODDHIGHLOW_OPTIONS,
   XIEN_OPTIONS,
+  RESULTS,
 } from "../utils/constants.js";
 
 const { WIN, LOSE } = BET_STATUS;
@@ -47,10 +50,101 @@ const getResults = async () => {
   };
 };
 
-const calculateResult = async () => {
-  // implement logic calculate result here
+const calculateResult = async (activeResult) => {
+  if (!activeResult) return;
 
-  return Math.round(Math.random() * 100);
+  const activeBettings = await Bet.find({
+    status: { $nin: [WIN, LOSE] },
+    createdAt: { $gte: activeResult.createdAt },
+  }).lean();
+
+  const odd = activeBettings.filter(
+    (item) => EVENODDHIGHLOW === item.type && ODD === item.chosenTextOption
+  );
+  const even = activeBettings.filter(
+    (item) => EVENODDHIGHLOW === item.type && EVEN === item.chosenTextOption
+  );
+  const low = activeBettings.filter(
+    (item) => EVENODDHIGHLOW === item.type && LOW === item.chosenTextOption
+  );
+  const high = activeBettings.filter(
+    (item) => EVENODDHIGHLOW === item.type && HIGH === item.chosenTextOption
+  );
+
+  const oddLow = activeBettings.filter(
+    (item) => XIEN === item.type && ODDLOW === item.chosenTextOption
+  );
+  const oddHigh = activeBettings.filter(
+    (item) => XIEN === item.type && ODDHIGH === item.chosenTextOption
+  );
+  const evenLow = activeBettings.filter(
+    (item) => XIEN === item.type && EVENLOW === item.chosenTextOption
+  );
+  const evenHigh = activeBettings.filter(
+    (item) => XIEN === item.type && EVENHIGH === item.chosenTextOption
+  );
+
+  const chooseNumber = activeBettings.filter((item) => LO === item.type);
+
+  const resultCases = {
+    oddLow: {
+      win19: [odd, low],
+      win32: [oddLow],
+    },
+    oddHigh: {
+      win19: [odd, high],
+      win32: [oddHigh],
+    },
+    evenLow: {
+      win19: [even, low],
+      win32: [evenLow],
+    },
+    evenHigh: {
+      win19: [even, high],
+      win32: [evenHigh],
+    },
+  };
+
+  const income = _.sumBy(activeBettings, (item) => item.amount);
+
+  const profits = [];
+
+  for (const key of Object.keys(resultCases)) {
+    const item = resultCases[key];
+    const { win19, win32 } = item;
+    let outcome = 0;
+    for (const win of win19) {
+      outcome += _.sumBy(win, (i) => i.amount) * 1.9;
+    }
+
+    for (const win of win32) {
+      outcome += _.sumBy(win, (i) => i.amount) * 3.2;
+    }
+
+    profits.push({ key, profit: income - outcome });
+  }
+
+  const sortedProfits = _.sortBy(profits, (p) => p.profit).reverse();
+  const maxProfit = sortedProfits[0];
+  const { key, profit } = maxProfit;
+
+  const availableResults = RESULTS[key];
+
+  const minChooseNumberAmount = _.minBy(chooseNumber, (i) => i.amount);
+  if (minChooseNumberAmount) {
+    const lessProfit = profit - minChooseNumberAmount.amount * 70;
+    if (
+      lessProfit > 0 &&
+      availableResults.includes(minChooseNumberAmount.chosenNumberOption)
+    ) {
+      const random = Math.random();
+      if (random < 0.15) {
+        minChooseNumberAmount.chosenNumberOption;
+      }
+    }
+  }
+
+  return _.sample(availableResults);
 };
 
 const updateBettings = async (activeResult) => {
@@ -102,8 +196,8 @@ const updateBettings = async (activeResult) => {
 };
 
 const createNewResult = async () => {
-  const result = await calculateResult();
   const activeResult = await Result.findOne({ value: -1 });
+  const result = await calculateResult(activeResult);
 
   if (activeResult) {
     activeResult.value = result;
