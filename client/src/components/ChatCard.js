@@ -45,6 +45,8 @@ const ChatCard = () => {
   const send = async (e) => {
     e.preventDefault();
     if (!message || !message.trim()) return;
+    setMessage("");
+
     if (!messageId) {
       const allMessages = await messageStore.get();
       const docIds = allMessages.docs.map((doc) => doc.id);
@@ -62,8 +64,6 @@ const ChatCard = () => {
       text: message,
       amount: (user && user.amount) || "",
     });
-
-    setMessage("");
   };
 
   const renderAmount = (item) => {
