@@ -37,3 +37,7 @@ export const signUp = (username, password) =>
 export const getInfo = () => api.get("/api/v1/account/me");
 
 export const getResults = () => api.get("/api/v1/results");
+
+export const getActiveBetting = () => api.get("/api/v1/bet/active");
+
+export const createBet = (data) => api.post("/api/v1/bet/createABet", data);

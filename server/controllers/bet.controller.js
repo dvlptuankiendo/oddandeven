@@ -22,7 +22,18 @@ const cancelABet = async (req, res) => {
     }
 };
 
+const getActiveBetting = async (req, res) => {
+    try {
+        const { userId } = req
+        const result = await betService.getActiveBet(userId);
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(400).send({ message: err.message });
+    }
+}
+
 export default {
     createABet,
-    cancelABet
+    cancelABet,
+    getActiveBetting
 };

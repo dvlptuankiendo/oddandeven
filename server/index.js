@@ -47,33 +47,35 @@ const socketIo = new Server(server, {
 socketIo.on("connection", (socket) => {
   ///Handle khi có connect từ client tới
   console.log("New client connected" + socket.id);
-  const TIME_PER_BET = 120;
-
-  let count = TIME_PER_BET;
-  let isProcessing = false;
-  const countdown = () => {
-    if (isProcessing) return;
-    setTimeout(async () => {
-      isProcessing = true;
-      if (!count) {
-        await resultService.createNewResult();
-        socketIo.emit("newresult");
-        count = TIME_PER_BET;
-      } else {
-        --count;
-        socketIo.emit("countdown", { count });
-      }
-      isProcessing = false;
-      countdown();
-    }, 1000);
-  };
-
-  countdown();
 
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
 });
+
+const TIME_PER_BET = 120;
+
+let count = TIME_PER_BET;
+let isProcessing = false;
+
+const countdown = () => {
+  if (isProcessing) return;
+  setTimeout(async () => {
+    isProcessing = true;
+    if (!count) {
+      await resultService.createNewResult();
+      socketIo.emit("newresult");
+      count = TIME_PER_BET;
+    } else {
+      --count;
+      socketIo.emit("countdown", { count });
+    }
+    isProcessing = false;
+    countdown();
+  }, 1000);
+};
+
+countdown();
 
 const port = process.env.PORT || 8888;
 server.listen(port, () => {
