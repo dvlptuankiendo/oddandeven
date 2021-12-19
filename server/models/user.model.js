@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
-import { DEPOSIT, WITHDRAW, MOMO, THESIEURE } from "../utils/constants.js";
+import { TRANSACTION_OPTIONS, TRANSACTION_PROVIDERS } from "../utils/constants.js";
+
+const { DEPOSIT, WITHDRAW } = TRANSACTION_OPTIONS
+const { MOMO, THESIEURE } = TRANSACTION_PROVIDERS
 
 const Schema = mongoose.Schema;
 

@@ -1,7 +1,9 @@
 import Bet from "../models/bet.model.js"
 import Ranking from "../models/ranking.model.js"
 import { getLocalBeginTodayTimestamp } from "../utils/helper.js";
-import { WIN, LOSE } from "../utils/constants.js"
+import { BET_STATUS } from "../utils/constants.js"
+
+const { WIN, LOSE } = BET_STATUS
 
 const getDailyRanking = async () => {
   const topUser = await Ranking

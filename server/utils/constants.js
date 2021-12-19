@@ -1,14 +1,36 @@
-export const LOWHIGH = "LOWHIGH";
-export const EVENODD = "EVENODD";
-export const MOMO = "MOMO";
-export const THESIEURE = "THESIEURE";
-export const DEPOSIT = "DEPOSIT";
-export const WITHDRAW = "WITHDRAW";
-export const WIN = "WIN";
-export const LOSE = "LOSE";
-export const LOW = "LOW";
-export const HIGH = "HIGH";
-export const EVEN = "EVEN";
-export const ODD = "ODD";
+export const BET_TYPES = {
+    EVENODDHIGHLOW: "EVENODDHIGHLOW",
+    XIEN: "XIEN",
+    LO: "LO"
+}
+
+export const EVENODDHIGHLOW_OPTIONS = {
+    EVEN: "EVEN",
+    ODD: "ODD",
+    HIGH: "HIGH",
+    LOW: "LOW",
+}
+
+export const XIEN_OPTIONS = {
+    ODDHIGH: "ODDHIGH",
+    ODDLOW: "ODDLOW",
+    EVENHIGH: "EVENHIGH",
+    EVENLOW: "EVENLOW"
+}
+
+export const BET_STATUS = {
+    WIN: "WIN",
+    LOSE: "LOSE"
+}
+
+export const TRANSACTION_PROVIDERS = {
+    MOMO: "MOMO",
+    THESIEURE: "THESIEURE"
+}
+
+export const TRANSACTION_OPTIONS = {
+    WITHDRAW: "WITHDRAW",
+    DEPOSIT: "DEPOSIT"
+}
 
 export const MIN_BET_AMOUNT = 1000000;

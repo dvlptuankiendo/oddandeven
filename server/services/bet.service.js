@@ -1,19 +1,32 @@
-import { MIN_BET_AMOUNT, LOWHIGH, EVENODD, WIN, LOSE, LOW, HIGH, EVEN, ODD } from "../utils/constants.js"
+import { MIN_BET_AMOUNT, EVENODDHIGHLOW_OPTIONS, BET_STATUS, BET_TYPES, XIEN_OPTIONS } from "../utils/constants.js"
 import User from "../models/user.model.js";
 import Bet from "../models/bet.model.js";
 
-const createABet = async (userId, type, chosenOption, amount) => {
+const { EVENODDHIGHLOW, XIEN, LO } = BET_TYPES
+const { ODDHIGH, ODDLOW, EVENHIGH, EVENLOW } = XIEN_OPTIONS
+const { LOW, HIGH, EVEN, ODD } = EVENODDHIGHLOW_OPTIONS
+const { WIN, LOSE } = BET_STATUS
+
+const createABet = async (userId, type, chosenTextOption, chosenNumberOption, amount) => {
     const existUser = await User.findOne({ _id: userId }).lean();
     if (!existUser) throw new Error("Người dùng không tồn tại");
 
     //logic check if exist pending bet ???
 
-    if (![LOWHIGH, EVENODD].includes(type)) throw new Error("Vui lòng chọn trò chơi")
+    if (![EVENODDHIGHLOW, XIEN, LO].includes(type)) throw new Error("Vui lòng chọn trò chơi")
 
-    const invalidLowHigh = type === LOWHIGH && ![LOW, HIGH].includes(chosenOption)
-    const invalidEvenOdd = type === EVENODD && ![EVEN, ODD].includes(chosenOption)
-
-    if (invalidLowHigh || invalidEvenOdd) throw new Error("Lựa chọn không hợp lệ")
+    const invalidEvenOddHighLow = (type === EVENODDHIGHLOW && ![LOW, HIGH, EVEN, ODD].includes(chosenTextOption))
+    const invalidXien = (type === XIEN && ![ODDHIGH, ODDLOW, EVENHIGH, EVENLOW].includes(chosenTextOption))
+    const invalidLo = false
+    if (type === LO) {
+        try {
+            const number = parseInt(chosenNumberOption)
+            if (Number.isNaN(number) || number > 99 || number < 0) invalidLo = true
+        } catch (error) {
+            throw new Error("Lựa chọn không hợp lệ")
+        }
+    }
+    if (invalidEvenOddHighLow || invalidXien || invalidLo) throw new Error("Lựa chọn không hợp lệ")
 
     if (!amount || amount < MIN_BET_AMOUNT) throw new Error(`Số tiền đặt cược tối thiểu là ${MIN_BET_AMOUNT}$`);
 
@@ -27,8 +40,10 @@ const createABet = async (userId, type, chosenOption, amount) => {
         userId,
         type,
         amount,
-        chosenOption
     })
+
+    if ([EVENODDHIGHLOW, XIEN].includes(type)) newBet.chosenTextOption = chosenTextOption
+    if (type === LO) newBet.chosenNumberOption = chosenNumberOption
 
     await newBet.save();
     return { id: newBet._id };
