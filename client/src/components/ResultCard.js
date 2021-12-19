@@ -4,7 +4,7 @@ import socketIOClient from "socket.io-client";
 
 import ContentCard from "./ContentCard";
 
-import { getResults } from "../services/api";
+import { getResults, getInfo } from "../services/api";
 import { AppContext } from "../contexts/app.context";
 import { host } from "../utils/constants";
 
@@ -17,13 +17,16 @@ const backgrounds = {
 
 const ResultCard = () => {
   const socketRef = useRef();
+  const { setIsLoading, setUser } = useContext(AppContext);
   const [count, setCount] = useState(null);
 
   useEffect(() => {
     socketRef.current = socketIOClient.connect(host);
 
-    socketRef.current.on("newresult", () => {
+    socketRef.current.on("newresult", async () => {
       getData();
+      const res = await getInfo();
+      setUser(res.data);
     });
 
     socketRef.current.on("countdown", ({ count }) => {
@@ -35,7 +38,6 @@ const ResultCard = () => {
     };
   }, []);
 
-  const { setIsLoading } = useContext(AppContext);
   const [results, setResults] = useState({
     lastResult: null,
     lowHighs: [],

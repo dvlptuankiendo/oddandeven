@@ -1,14 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { GiGoldBar } from "react-icons/gi";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import Select from "react-select";
 import { Row, Col, Button, Label, Input } from "reactstrap";
+import socketIOClient from "socket.io-client";
 
 import ContentCard from "./ContentCard";
 import { AppContext } from "../contexts/app.context";
 import { formatAmount } from "../utils/helpers";
 import { getActiveBetting, createBet } from "../services/api";
 import {
+  host,
   BET_TYPES,
   EVENODDHIGHLOW_OPTIONS,
   XIEN_OPTIONS,
@@ -47,6 +49,7 @@ const btnValues = {
 };
 
 const BetCard = () => {
+  const socketRef = useRef();
   const { user, setUser, setIsLoading } = useContext(AppContext);
   const [existedBetting, setExistedBetting] = useState(null);
 
@@ -61,16 +64,35 @@ const BetCard = () => {
     if (!user) return;
 
     const res = await getActiveBetting();
-    if (res.data) setExistedBetting(res.data);
+    if (res.data) {
+      setExistedBetting(res.data);
+    } else {
+      setExistedBetting(null);
+      reset();
+      setAmount(0);
+    }
+  };
+
+  const reset = () => {
+    setChosenNumberOption(null);
+    setChosenTextOption(null);
   };
 
   useEffect(() => {
     checkBlocking();
+    socketRef.current = socketIOClient.connect(host);
+
+    socketRef.current.on("newresult", async () => {
+      await checkBlocking();
+    });
+
+    return () => {
+      socketRef.current.disconnect();
+    };
   }, [user]);
 
   useEffect(() => {
-    setChosenNumberOption(null);
-    setChosenTextOption(null);
+    reset();
   }, [type]);
 
   useEffect(() => {
@@ -81,6 +103,8 @@ const BetCard = () => {
         setChosenTextOption(existedBetting.chosenTextOption);
       existedBetting.chosenNumberOption &&
         setChosenNumberOption(existedBetting.chosenNumberOption);
+    } else {
+      reset();
     }
   }, [existedBetting]);
 
@@ -244,7 +268,7 @@ const BetCard = () => {
             placeholder="Nhập số tiền đặt cược"
             type="number"
             disabled={isBlocked}
-            value={amount}
+            value={amount || ""}
             onChange={(e) => setAmount(parseInt(e.target.value))}
           />
         </div>
