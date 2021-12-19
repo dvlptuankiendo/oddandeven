@@ -1,7 +1,11 @@
 import Result from "../models/result.model.js";
 
 const getResults = async () => {
-  const results = await Result.find().sort({ createdAt: -1 }).limit(10).lean();
+  const activeResult = await Result.findOne({ value: -1 }).lean();
+  const results = await Result.find({ value: { $ne: -1 } })
+    .sort({ createdAt: -1 })
+    .limit(10)
+    .lean();
 
   const lastResult = results[0].value;
   const lowHighs = [];
@@ -22,10 +26,33 @@ const getResults = async () => {
   }
 
   return {
+    activeResultId: activeResult?._id,
     lastResult,
     lowHighs,
     evenOdds,
   };
 };
 
-export default { getResults };
+const calculateResult = async () => {
+  // implement logic calculate result here
+
+  return Math.round(Math.random() * 100);
+};
+
+const createNewResult = async () => {
+  const result = await calculateResult();
+  const activeResult = await Result.findOne({ value: -1 });
+
+  if (activeResult) {
+    activeResult.value = result;
+    await activeResult.save();
+  }
+
+  const newResult = new Result({
+    value: -1,
+  });
+
+  await newResult.save();
+};
+
+export default { getResults, createNewResult };

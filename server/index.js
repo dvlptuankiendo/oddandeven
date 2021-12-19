@@ -1,9 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv'
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import http from "http";
+import { Server } from "socket.io";
 
-import routes from './routes/index.js'
+import routes from "./routes/index.js";
+import resultService from "./services/result.service.js";
 
 dotenv.config();
 
@@ -12,8 +15,8 @@ const uri = process.env.MONGO_URI;
 mongoose.connect(uri, { autoIndex: true, autoCreate: true });
 
 const connection = mongoose.connection;
-connection.once('open', () =>
-  console.log('MongoDB database connected successfully!'),
+connection.once("open", () =>
+  console.log("MongoDB database connected successfully!")
 );
 
 process.setMaxListeners(Infinity);
@@ -29,12 +32,53 @@ const corsConfig = {
 };
 app.use(cors(corsConfig));
 
-app.get('/', (req, res) => res.send('Express + TypeScript Server'));
+app.get("/", (req, res) => res.send("Express + TypeScript Server"));
 
-const port = process.env.PORT || 8888
+app.use("/api", routes);
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+const server = http.createServer(app);
 
-app.use('/api', routes);
+const socketIo = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
+
+socketIo.on("connection", (socket) => {
+  ///Handle khi có connect từ client tới
+  console.log("New client connected" + socket.id);
+  const TIME_PER_BET = 120;
+
+  let count = TIME_PER_BET;
+  let isProcessing = false;
+  const countdown = () => {
+    if (isProcessing) {
+      countdown();
+      return;
+    }
+    setTimeout(async () => {
+      isProcessing = true;
+      if (!count) {
+        await resultService.createNewResult();
+        socketIo.emit("newresult");
+        count = TIME_PER_BET;
+      } else {
+        --count;
+        socketIo.emit("countdown", { count });
+      }
+      isProcessing = false;
+      countdown();
+    }, 1000);
+  };
+
+  countdown();
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
+
+const port = process.env.PORT || 8888;
+server.listen(port, () => {
+  console.log("Server is running");
+});
