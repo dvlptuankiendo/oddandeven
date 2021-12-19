@@ -16,7 +16,9 @@ export const AppContextProvider = ({ children }) => {
       if (!token) throw new Error();
       const res = await getInfo();
       setUser(res.data);
-    } catch {}
+    } catch {
+      localStorage.removeItem(ACCESS_TOKEN);
+    }
 
     setInitialized(true);
   };

@@ -48,7 +48,7 @@ const AuthRoutes = () => {
 const MainRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home isAuth={true} />} />
+      <Route path="/" element={<Home />} />
       <Route path="/deposit" element={<Deposit />} />
       <Route path="/withdraw" element={<WithDraw />} />
       <Route path="*" exact element={<Navigate replace to="/" />} />

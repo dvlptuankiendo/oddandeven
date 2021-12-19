@@ -15,7 +15,8 @@ import {
 import { AppContext } from "../contexts/app.context";
 
 const Header = ({ isAuth }) => {
-  const { signOut } = useContext(AppContext);
+  const { user, signOut } = useContext(AppContext);
+  const isUnauthenticated = !user;
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
@@ -30,7 +31,7 @@ const Header = ({ isAuth }) => {
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar className="w-100">
-          {isAuth && (
+          {!isUnauthenticated && (
             <Nav navbar>
               <NavItem>
                 <NavLink>
@@ -55,7 +56,7 @@ const Header = ({ isAuth }) => {
               </NavItem>
             </Nav>
           )}
-          {!isAuth ? (
+          {isUnauthenticated ? (
             <Nav className="ml-auto" navbar>
               <NavItem>
                 <NavLink>

@@ -7,12 +7,12 @@ import ResultCard from "../components/ResultCard";
 import BetCard from "../components/BetCard";
 import GuideModal from "../components/GuideModal";
 
-const Home = ({ isAuth }) => {
+const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <ContentContainer isAuth={isAuth}>
+    <ContentContainer>
       <GuideModal isOpen={isOpen} toggle={toggle} />
       <Container className="p-3">
         <Button color="primary" className="mb-3" onClick={toggle}>
