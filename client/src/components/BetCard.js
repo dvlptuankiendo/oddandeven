@@ -5,6 +5,7 @@ import { Row, Col, Button, Label, Input } from "reactstrap";
 
 import ContentCard from "./ContentCard";
 import { AppContext } from "../contexts/app.context";
+import { formatAmount } from "../utils/helpers";
 
 const options = [
   { label: "Chẵn lẽ - Tài xỉu (10tr ăn 19tr)", value: 1 },
@@ -37,7 +38,7 @@ const BetCard = () => {
         )}
         <div className="d-flex align-items-center mb-2">
           <GiGoldBar size={30} color="yellow" className="mr-2" />
-          <span className="font-weight-bold">{user?.amount}</span>
+          <span className="font-weight-bold">{formatAmount(user?.amount)}</span>
         </div>
         <div className="mb-2">
           <Select

@@ -5,6 +5,7 @@ import { FaUserAlt } from "react-icons/fa";
 import ContentCard from "./ContentCard";
 import firebase from "../configs/firebase";
 import { AppContext } from "../contexts/app.context";
+import { formatAmount } from "../utils/helpers";
 
 const messageStore = firebase.firestore().collection("Messages");
 
@@ -67,7 +68,7 @@ const ChatCard = () => {
 
   const renderAmount = (item) => {
     if (!item.amount) return "";
-    return `- Số dư: ${`${item.amount}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+    return `- Số dư: ${formatAmount(item.amount)}`;
   };
 
   return (

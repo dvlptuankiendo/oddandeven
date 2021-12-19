@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { FiLogIn, FiLogOut, FiUserPlus } from "react-icons/fi";
+import { FiLogIn, FiLogOut, FiUserPlus, FiUser } from "react-icons/fi";
 import {
   Collapse,
   Navbar,
@@ -13,8 +13,9 @@ import {
 } from "reactstrap";
 
 import { AppContext } from "../contexts/app.context";
+import { formatAmount } from "../utils/helpers";
 
-const Header = ({ isAuth }) => {
+const Header = () => {
   const { user, signOut } = useContext(AppContext);
   const isUnauthenticated = !user;
   const [isOpen, setIsOpen] = useState(false);
@@ -81,6 +82,12 @@ const Header = ({ isAuth }) => {
             </Nav>
           ) : (
             <Nav className="ml-auto" navbar>
+              <NavItem className="d-flex align-items-center mr-3">
+                <FiUser size={25} color="#fff" className="mr-2" />
+                <span className="text-white font-weight-bold">
+                  Số dư: {formatAmount(user.amount)}
+                </span>
+              </NavItem>
               <Button outline className="mr-2" onClick={signOut}>
                 <FiLogOut className="mr-2" color="#fff" />
                 ĐĂNG XUẤT
