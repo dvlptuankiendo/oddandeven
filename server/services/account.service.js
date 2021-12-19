@@ -27,7 +27,8 @@ const register = async (username, password) => {
   const isLostInfo =
     !username || !username.trim() || !password || !password.trim();
 
-  if (!!isLostInfo) throw new Error("Vui lòng cung cấp đủ tên đăng nhập và mật khẩu");
+  if (!!isLostInfo)
+    throw new Error("Vui lòng cung cấp đủ tên đăng nhập và mật khẩu");
 
   const existedUser = await User.findOne({ username }).lean();
   if (!!existedUser) throw new Error("Tên đăng nhập đã được sử dụng");
@@ -55,8 +56,16 @@ const getInfo = async (token) => {
   };
 };
 
+const getHistory = async (userId) => {
+  const user = await User.findOne({ _id: userId }).lean();
+  if (user) return user.history || [];
+
+  return [];
+};
+
 export default {
   logIn,
   register,
   getInfo,
+  getHistory,
 };

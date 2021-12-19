@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
-import { TRANSACTION_OPTIONS, TRANSACTION_PROVIDERS } from "../utils/constants.js";
+import {
+  TRANSACTION_OPTIONS,
+  TRANSACTION_PROVIDERS,
+  TRANSACTION_STATUS,
+} from "../utils/constants.js";
 
-const { DEPOSIT, WITHDRAW } = TRANSACTION_OPTIONS
-const { MOMO, THESIEURE } = TRANSACTION_PROVIDERS
+const { DEPOSIT, WITHDRAW } = TRANSACTION_OPTIONS;
+const { MOMO, THESIEURE } = TRANSACTION_PROVIDERS;
+const { IS_PROCESSING, IS_COMPLETED } = TRANSACTION_STATUS;
 
 const Schema = mongoose.Schema;
 
@@ -26,7 +31,9 @@ const schema = new Schema({
     {
       type: { type: String, enum: [DEPOSIT, WITHDRAW] },
       provider: { type: String, enum: [MOMO, THESIEURE] },
+      goldAmount: { type: Number },
       amount: { type: Number },
+      status: { type: String, enum: [IS_PROCESSING, IS_COMPLETED] },
       metaData: { type: String },
       createdAt: { type: Number, required: true, default: () => Date.now() },
     },

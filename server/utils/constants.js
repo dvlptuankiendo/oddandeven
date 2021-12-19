@@ -23,6 +23,11 @@ export const BET_STATUS = {
   LOSE: "LOSE",
 };
 
+export const TRANSACTION_STATUS = {
+  IS_PROCESSING: "IsProcessing",
+  IS_COMPLETED: "IsCompleted",
+};
+
 export const TRANSACTION_PROVIDERS = {
   MOMO: "MOMO",
   THESIEURE: "THESIEURE",

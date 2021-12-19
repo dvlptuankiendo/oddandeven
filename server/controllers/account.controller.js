@@ -31,8 +31,19 @@ const getInfo = async (req, res) => {
   }
 };
 
+const getHistory = async (req, res) => {
+  try {
+    const { userId } = req;
+    const result = await accountService.getHistory(userId);
+    res.status(200).send(result);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
 export default {
   logIn,
   register,
   getInfo,
+  getHistory,
 };

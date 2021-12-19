@@ -3,6 +3,10 @@
   scroll-behavior: smooth;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .loading-container {
   position: fixed;
   top: 0;

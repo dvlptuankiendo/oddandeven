@@ -40,3 +40,5 @@ export const getActiveBetting = () => api.get("/api/v1/bet/active");
 export const createBet = (data) => api.post("/api/v1/bet/createABet", data);
 
 export const getRanking = () => api.get("/api/v1/ranking/daily");
+
+export const getHistory = () => api.get("/api/v1/account/history");
