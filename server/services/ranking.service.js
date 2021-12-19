@@ -2,6 +2,7 @@ import Bet from "../models/bet.model.js";
 import Ranking from "../models/ranking.model.js";
 import { getLocalBeginTodayTimestamp } from "../utils/helper.js";
 import { BET_STATUS } from "../utils/constants.js";
+import User from "../models/user.model.js";
 
 const { WIN, LOSE } = BET_STATUS;
 
@@ -22,7 +23,7 @@ const getDailyRanking = async () => {
 };
 
 const updateDailyRanking = async () => {
-  const top = 10;
+  const top = 7;
 
   const localStartOfDayTimeStamp = getLocalBeginTodayTimestamp();
 
@@ -53,6 +54,18 @@ const updateDailyRanking = async () => {
   const usersToBeInserted = topUsers
     .sort((u1, u2) => (u1.amount < u2.amount ? 1 : -1))
     .slice(0, top);
+
+  const rewards = [
+    500000000, 250000000, 100000000, 75000000, 50000000, 40000000, 30000000,
+  ];
+  for (let [index, item] of usersToBeInserted.entries()) {
+    const { userId } = item;
+    const user = await User.findOne({ _id: userId });
+    if (user) {
+      user.amount = user.amount + rewards[index];
+      await user.save();
+    }
+  }
 
   const newRanking = new Ranking({
     users: usersToBeInserted,
