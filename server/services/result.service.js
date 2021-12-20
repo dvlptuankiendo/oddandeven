@@ -161,9 +161,12 @@ const updateBettings = async (activeResult) => {
   for (const betting of activeBettings) {
     const { userId, type, amount, chosenTextOption, chosenNumberOption } =
       betting;
-    let isWin = false;
+    let isWinEvenOddHighLow = false;
+    let isWinXien = false;
+    let isWinLo = false;
+
     if (type === EVENODDHIGHLOW) {
-      isWin =
+      isWinEvenOddHighLow =
         (chosenTextOption === EVEN && isEven) ||
         (chosenTextOption === ODD && isOdd) ||
         (chosenTextOption === HIGH && isHigh) ||
@@ -171,7 +174,7 @@ const updateBettings = async (activeResult) => {
     }
 
     if (type === XIEN) {
-      isWin =
+      isWinXien =
         (chosenTextOption === EVENHIGH && isEven && isHigh) ||
         (chosenTextOption === EVENLOW && isEven && isLow) ||
         (chosenTextOption === ODDHIGH && isOdd && isHigh) ||
@@ -179,17 +182,24 @@ const updateBettings = async (activeResult) => {
     }
 
     if (type === LO) {
-      isWin = result === chosenNumberOption;
+      isWinLo = result === chosenNumberOption;
     }
 
-    if (isWin) {
-      const user = await User.findOne({ _id: userId });
-      if (user) {
+    const user = await User.findOne({ _id: userId });
+    if (user) {
+      user.amountPlayedToday += amount;
+      if (isWinEvenOddHighLow) {
         user.amount = user.amount + amount * 1.9;
-        await user.save();
       }
+      if (isWinXien) {
+        user.amount = user.amount + amount * 3.2;
+      }
+      if (isWinLo) {
+        user.amount = user.amount + amount * 70;
+      }
+      await user.save();
     }
-
+    const isWin = isWinEvenOddHighLow || isWinXien || isWinLo
     betting.status = isWin ? WIN : LOSE;
     await betting.save();
   }
