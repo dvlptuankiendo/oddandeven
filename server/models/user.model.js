@@ -38,6 +38,11 @@ const schema = new Schema({
       createdAt: { type: Number, required: true, default: () => Date.now() },
     },
   ],
+  amountPlayedToday: {
+    type: Number,
+    required: true,
+    default: 0
+  },
   createdAt: {
     type: Number,
     required: true,
