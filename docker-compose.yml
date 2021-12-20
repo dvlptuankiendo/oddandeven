@@ -1,0 +1,17 @@
+version: "3.4"
+services:
+  ui:
+    build: ./client
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_BASE_URL=http://localhost:8888
+  api:
+    build: ./server
+    ports:
+      - "8888:8888"
+    environment:
+      - PORT=8000
+      - MONGO_URI=mongodb+srv://test:test@cluster0.qsrxo.mongodb.net/oddandeven?retryWrites=true&w=majority
+      - ACCESS_TOKEN_SECRET_KEY=somerandomstring
+      - JWT_ACCESS_TOKEN_LIFE=14d
