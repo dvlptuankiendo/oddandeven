@@ -11,7 +11,7 @@ services:
     ports:
       - "8888:8888"
     environment:
-      - PORT=8000
+      - PORT=8888
       - MONGO_URI=mongodb+srv://test:test@cluster0.qsrxo.mongodb.net/oddandeven?retryWrites=true&w=majority
       - ACCESS_TOKEN_SECRET_KEY=somerandomstring
       - JWT_ACCESS_TOKEN_LIFE=14d
