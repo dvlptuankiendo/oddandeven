@@ -11,24 +11,35 @@ const rewards = [
 ];
 
 const getDailyRanking = async () => {
-  const topUser = await Ranking.findOne()
-    .sort({ createdAt: -1 })
-    .populate({
-      path: "users",
-      populate: "userId",
+  const localStartOfDayTimeStamp = getLocalBeginTodayTimestamp();
+
+  const todayBets = await Bet
+    .find({
+      createdAt: { $gte: localStartOfDayTimeStamp },
+      status: { $in: [WIN, LOSE] }
     })
-    .select("users");
+    .populate('userId')
+    .select("userId");
 
-  const data = topUser.users.map((u, idx) => {
-    return {
-      top: idx + 1,
-      username: u.userId.username,
-      amount: u.amount,
-      reward: rewards[idx],
-    };
-  });
+  const filtedtodayBetsByUser = []
+  for (const bet of todayBets) {
+    const existBetWithUser = filtedtodayBetsByUser.find(b => b.userId.username === bet.userId.username)
+    if (!existBetWithUser) filtedtodayBetsByUser.push(bet)
+  }
 
-  return data;
+  const data = filtedtodayBetsByUser
+    .sort((b1, b2) => (b1.userId.amountPlayedToday < b2.userId.amountPlayedToday ? 1 : -1))
+    .slice(0, 7)
+    .map((b, idx) => {
+      return {
+        top: idx + 1,
+        username: b.userId.username,
+        amount: b.userId.amountPlayedToday,
+        reward: rewards[idx],
+      }
+    })
+
+  return data
 };
 
 const updateDailyRanking = async () => {
