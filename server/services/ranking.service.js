@@ -91,7 +91,12 @@ const updateDailyRanking = async () => {
   await newRanking.save();
 };
 
+const resetAmountPlayedToday = async () => {
+  await User.updateMany({}, { amountPlayedToday: 0 })
+}
+
 export default {
   getDailyRanking,
   updateDailyRanking,
+  resetAmountPlayedToday
 };

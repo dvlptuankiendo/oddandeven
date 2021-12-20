@@ -86,7 +86,7 @@ countdown();
 const job = new cron.CronJob({
   cronTime: "00 00 00 * * 0-6", // job runs at 0h00 everyday
   onTick: async function () {
-    await rankingService.updateDailyRanking();
+    await rankingService.resetAmountPlayedToday();
   },
   start: true,
 });
@@ -97,3 +97,5 @@ const port = process.env.PORT || 8888;
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+rankingService.resetAmountPlayedToday()
