@@ -24,6 +24,7 @@ const schema = new Schema({
   amount: { type: Number, required: true },
   status: { type: String, enum: [WIN, LOSE] },
   createdAt: { type: Number, required: true, default: () => Date.now() },
+  resultId: { type: Schema.Types.ObjectId, required: true, ref: "Result" }
 });
 
 const Bet = mongoose.model("Bet", schema);

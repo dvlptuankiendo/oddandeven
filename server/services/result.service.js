@@ -200,6 +200,7 @@ const updateBettings = async (activeResult) => {
     }
     const isWin = isWinEvenOddHighLow || isWinXien || isWinLo
     betting.status = isWin ? WIN : LOSE;
+    betting.resultId = activeResult;
     await betting.save();
   }
 };

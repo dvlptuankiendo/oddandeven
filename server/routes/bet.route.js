@@ -7,5 +7,6 @@ const router = express.Router();
 router.post("/createABet", betController.createABet);
 router.post("/cancelABet/:betId", betController.cancelABet);
 router.get("/active", auth, betController.getActiveBetting);
+router.get("/recent", auth, betController.getRecentBets);
 
 export default router;

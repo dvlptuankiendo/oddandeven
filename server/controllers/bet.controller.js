@@ -32,8 +32,20 @@ const getActiveBetting = async (req, res) => {
     }
 }
 
+const getRecentBets = async (req, res) => {
+    try {
+        const { userId } = req
+        const { isOnlyFromUser, count } = req.query
+        const result = await betService.getRecentBets(userId, isOnlyFromUser, count);
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(400).send({ message: err.message });
+    }
+}
+
 export default {
     createABet,
     cancelABet,
-    getActiveBetting
+    getActiveBetting,
+    getRecentBets
 };
