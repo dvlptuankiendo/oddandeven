@@ -60,6 +60,7 @@ const createABet = async (
 
   await User.findByIdAndUpdate(existUser._id, {
     amount: existUser.amount - amount,
+    amountPlayedToday: existUser.amountPlayedToday + amount
   });
 
   const newBet = new Bet({

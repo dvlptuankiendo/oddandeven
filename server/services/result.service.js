@@ -187,7 +187,6 @@ const updateBettings = async (activeResult) => {
 
     const user = await User.findOne({ _id: userId });
     if (user) {
-      user.amountPlayedToday += amount;
       if (isWinEvenOddHighLow) {
         user.amount = user.amount + amount * 1.9;
       }
