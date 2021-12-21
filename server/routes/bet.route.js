@@ -8,5 +8,6 @@ router.post("/createABet", betController.createABet);
 router.post("/cancelABet/:betId", betController.cancelABet);
 router.get("/active", auth, betController.getActiveBetting);
 router.get("/recent", auth, betController.getRecentBets);
+router.get("/latestTotalAmount", betController.getLatestBetTotalAmount);
 
 export default router;

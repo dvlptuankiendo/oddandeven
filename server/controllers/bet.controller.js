@@ -43,9 +43,19 @@ const getRecentBets = async (req, res) => {
     }
 }
 
+const getLatestBetTotalAmount = async (req, res) => {
+    try {
+        const result = await betService.getLatestBetTotalAmount();
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(400).send({ message: err.message });
+    }
+}
+
 export default {
     createABet,
     cancelABet,
     getActiveBetting,
-    getRecentBets
+    getRecentBets,
+    getLatestBetTotalAmount
 };

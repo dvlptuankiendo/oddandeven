@@ -7,6 +7,7 @@ import {
 } from "../utils/constants.js";
 import User from "../models/user.model.js";
 import Bet from "../models/bet.model.js";
+import Result from "../models/result.model.js";
 
 const { EVENODDHIGHLOW, XIEN, LO } = BET_TYPES;
 const { ODDHIGH, ODDLOW, EVENHIGH, EVENLOW } = XIEN_OPTIONS;
@@ -180,9 +181,36 @@ const formatRecentBet = (bet) => {
   }
 }
 
+const getLatestBetTotalAmount = async () => {
+  const evenAmount = 0
+  const oddAmount = 0
+  const highAmount = 0
+  const lowAmount = 0
+  const lastUndoneResult = await Result.findOne({ value: -1 }).lean()
+  if (!!lastUndoneResult) {
+    const lastUndoneBets = await Bet
+      .find(
+        {
+          resultId: lastUndoneResult._id,
+          status: { $nin: [WIN, LOSE] },
+        })
+      .lean()
+    for (const bet of lastUndoneBets) {
+      const { chosenTextOption, amount } = bet
+      if (chosenTextOption === EVEN) evenAmount += amount
+      if (chosenTextOption === ODD) oddAmount += amount
+      if (chosenTextOption === HIGH) highAmount += amount
+      if (chosenTextOption === LOW) lowAmount += amount
+    }
+  }
+
+  return { evenAmount, oddAmount, highAmount, lowAmount }
+}
+
 export default {
   createABet,
   cancelABet,
   getActiveBet,
-  getRecentBets
+  getRecentBets,
+  getLatestBetTotalAmount
 };
