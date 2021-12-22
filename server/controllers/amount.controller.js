@@ -21,4 +21,15 @@ const depositTSR = async (req, res) => {
   }
 };
 
-export default { depositMomo, depositTSR };
+const requestWithDraw = async (req, res) => {
+  try {
+    const { userId } = req;
+    const { provider, amount, address } = req.body;
+    await amountService.requestWithdraw(userId, { provider, amount, address });
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
+export default { depositMomo, depositTSR, requestWithDraw };

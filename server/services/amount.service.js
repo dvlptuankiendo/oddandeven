@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import moment from "moment";
 
 import User from "../models/user.model.js";
+import WithDraw from "../models/withdraw.model.js";
+
 import {
   TRANSACTION_OPTIONS,
   TRANSACTION_PROVIDERS,
@@ -174,4 +176,28 @@ const depositTSR = async (userId, code) => {
   }
 };
 
-export default { depositMomo, depositTSR };
+const requestWithdraw = async (userId, { provider, amount, address }) => {
+  const user = await User.findOne({ _id: userId });
+  if (!user) throw new Error("Bad request");
+
+  if (![MOMO, THESIEURE].includes(provider)) throw new Error("Ví không hợp lệ");
+
+  if (!address || !address.trim()) throw new Error("Địa chỉ không hợp lệ");
+
+  if (!amount || amount < 10000000 || amount % 1 !== 0)
+    throw new Error("Số dư không hợp lệ");
+
+  if (!user.amount || user.amount < amount) throw new Error("Không đủ số dư");
+
+  user.amount = user.amount - amount;
+  await user.save();
+
+  const request = new WithDraw({
+    userId: user._id,
+    amount,
+    provider,
+  });
+  await request.save();
+};
+
+export default { depositMomo, depositTSR, requestWithdraw };

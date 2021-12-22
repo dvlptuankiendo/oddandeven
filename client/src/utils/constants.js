@@ -21,3 +21,8 @@ export const XIEN_OPTIONS = {
   EVENHIGH: "EVENHIGH",
   EVENLOW: "EVENLOW",
 };
+
+export const PROVIDERS = {
+  MOMO: "MOMO",
+  THESIEURE: "THESIEURE",
+};

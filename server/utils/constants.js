@@ -23,9 +23,10 @@ export const BET_STATUS = {
   LOSE: "LOSE",
 };
 
-export const TRANSACTION_STATUS = {
+export const WITHDRAW_REQUEST_STATUS = {
   IS_PROCESSING: "IsProcessing",
-  IS_COMPLETED: "IsCompleted",
+  APPROVED: "Approved",
+  CANCELLED: "Cancelled",
 };
 
 export const TRANSACTION_PROVIDERS = {

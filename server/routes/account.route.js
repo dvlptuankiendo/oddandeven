@@ -8,5 +8,6 @@ router.post("/logIn", accountController.logIn);
 router.post("/register", accountController.register);
 router.get("/me", accountController.getInfo);
 router.get("/history", auth, accountController.getHistory);
+router.get("/withdraw", auth, accountController.getWithDrawRequest);
 
 export default router;

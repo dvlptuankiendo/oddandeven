@@ -2,6 +2,7 @@ import passwordHash from "password-hash";
 import jwt from "jsonwebtoken";
 
 import User from "../models/user.model.js";
+import WithDraw from "../models/withdraw.model.js";
 
 const logIn = async (username, password) => {
   const user = await User.findOne({ username }).lean();
@@ -63,9 +64,18 @@ const getHistory = async (userId) => {
   return [];
 };
 
+const getWithDrawRequest = async (userId) => {
+  const requests = await WithDraw.find({ userId })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  return requests;
+};
+
 export default {
   logIn,
   register,
   getInfo,
   getHistory,
+  getWithDrawRequest,
 };

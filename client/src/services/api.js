@@ -47,3 +47,8 @@ export const depositMomo = () => api.post("/api/v1/amount/deposit/momo");
 
 export const depositTSR = (data) =>
   api.post("/api/v1/amount/deposit/tsr", data);
+
+export const getWithDrawRequest = () => api.get("/api/v1/account/withdraw");
+
+export const requestWithDraw = (data) =>
+  api.post("/api/v1/amount/withdraw", data);

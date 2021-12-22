@@ -41,9 +41,20 @@ const getHistory = async (req, res) => {
   }
 };
 
+const getWithDrawRequest = async (req, res) => {
+  try {
+    const { userId } = req;
+    const result = await accountService.getWithDrawRequest(userId);
+    res.status(200).send(result);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
+};
+
 export default {
   logIn,
   register,
   getInfo,
   getHistory,
+  getWithDrawRequest,
 };

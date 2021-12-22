@@ -8,4 +8,6 @@ router.post("/deposit/momo", auth, amountController.depositMomo);
 
 router.post("/deposit/tsr", auth, amountController.depositTSR);
 
+router.post("/withdraw", auth, amountController.requestWithDraw);
+
 export default router;
