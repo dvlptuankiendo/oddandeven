@@ -35,14 +35,6 @@ const Deposit = () => {
     getData();
   }, []);
 
-  const renderStatus = (item) => {
-    if (item.status === "IsProcessing") return "Đang xử lý";
-    if (item.status === "IsCompleted") return "Đã hoàn thành";
-    return "";
-  };
-
-  console.log(isDesktop);
-
   return (
     <ContentContainer>
       <Container className="h-100">
@@ -65,7 +57,7 @@ const Deposit = () => {
               </Button>
             </Col>
             <Col md={9}>
-              {activeTab === 1 && <Momo />}
+              {activeTab === 1 && <Momo getData={getData} />}
               {activeTab === 2 && <TheSieuRe />}
             </Col>
           </Row>
@@ -78,21 +70,23 @@ const Deposit = () => {
                     <th className="text-center align-middle">Thời gian</th>
                     <th className="text-center align-middle">Số tiền</th>
                     <th className="text-center align-middle">Số vàng</th>
-                    <th className="text-center align-middle">Trạng thái</th>
                   </tr>
                 </thead>
                 <tbody>
                   {history && !!history.length ? (
                     history.map((item, index) => (
                       <tr key={index}>
-                        <td>
-                          {moment(
-                            new Date(item.createdAt).format("DD/MM/YYYY HH:mm")
+                        <td className="text-center align-middle">
+                          {moment(new Date(item.createdAt)).format(
+                            "DD/MM/YYYY HH:mm"
                           )}
                         </td>
-                        <td>{formatAmount(item.amount)}</td>
-                        <td>{formatAmount(item.goldAmount)}</td>
-                        <td>{renderStatus(item)}</td>
+                        <td className="text-center align-middle">
+                          {formatAmount(item.amount)}
+                        </td>
+                        <td className="text-center align-middle">
+                          {formatAmount(item.goldAmount)}
+                        </td>
                       </tr>
                     ))
                   ) : (
