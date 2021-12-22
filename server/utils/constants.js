@@ -58,3 +58,5 @@ export const RESULTS = {
     88, 90, 92, 94, 96, 98,
   ],
 };
+
+export const MOMO_RATE = 7600;

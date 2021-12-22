@@ -2,12 +2,10 @@ import mongoose from "mongoose";
 import {
   TRANSACTION_OPTIONS,
   TRANSACTION_PROVIDERS,
-  TRANSACTION_STATUS,
 } from "../utils/constants.js";
 
 const { DEPOSIT, WITHDRAW } = TRANSACTION_OPTIONS;
 const { MOMO, THESIEURE } = TRANSACTION_PROVIDERS;
-const { IS_PROCESSING, IS_COMPLETED } = TRANSACTION_STATUS;
 
 const Schema = mongoose.Schema;
 
@@ -33,15 +31,15 @@ const schema = new Schema({
       provider: { type: String, enum: [MOMO, THESIEURE] },
       goldAmount: { type: Number },
       amount: { type: Number },
-      status: { type: String, enum: [IS_PROCESSING, IS_COMPLETED] },
-      metaData: { type: String },
+      externalId: [{ type: String }],
       createdAt: { type: Number, required: true, default: () => Date.now() },
     },
   ],
+  isProcessing: { type: Boolean, default: false },
   amountPlayedToday: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
   },
   createdAt: {
     type: Number,
