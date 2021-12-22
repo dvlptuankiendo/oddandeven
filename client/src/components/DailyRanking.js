@@ -61,28 +61,36 @@ const DailyRanking = () => {
           </tr>
         </thead>
         <tbody>
-          {rankings.map((item, index) => (
-            <tr key={index}>
-              <td className="d-flex align-items-center justify-content-center">
-                <img src={badges[index]} className="badge-icon" />
-              </td>
-              <td
-                className={`text-center align-middle ${fontSizes[index]} ${textColors[index]}`}
-              >
-                {item.username}
-              </td>
-              <td
-                className={`text-center align-middle ${fontSizes[index]} ${textColors[index]}`}
-              >
-                {formatAmount(item.amount)}
-              </td>
-              <td
-                className={`text-center align-middle ${fontSizes[index]} ${textColors[index]}`}
-              >
-                {formatAmount(item.reward)}
+          {rankings && !!rankings.length ? (
+            rankings.map((item, index) => (
+              <tr key={index}>
+                <td className="d-flex align-items-center justify-content-center">
+                  <img src={badges[index]} className="badge-icon" />
+                </td>
+                <td
+                  className={`text-center align-middle ${fontSizes[index]} ${textColors[index]}`}
+                >
+                  {item.username}
+                </td>
+                <td
+                  className={`text-center align-middle ${fontSizes[index]} ${textColors[index]}`}
+                >
+                  {formatAmount(item.amount)}
+                </td>
+                <td
+                  className={`text-center align-middle ${fontSizes[index]} ${textColors[index]}`}
+                >
+                  {formatAmount(item.reward)}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td className="text-center align-middle" colSpan={4}>
+                Không có dữ liệu.
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </Table>
     </>
