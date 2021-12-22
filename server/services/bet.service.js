@@ -59,6 +59,9 @@ const createABet = async (
 
   //logic prevent creating a bet at last 15 seconds or when calculating result ???
 
+  const mostRecentUndoneResult = await Result.findOne({ value: -1 }).lean()
+  if (!mostRecentUndoneResult) throw new Error("Đặt cược thất bại");
+
   await User.findByIdAndUpdate(existUser._id, {
     amount: existUser.amount - amount,
     amountPlayedToday: existUser.amountPlayedToday + amount
@@ -73,6 +76,8 @@ const createABet = async (
   if ([EVENODDHIGHLOW, XIEN].includes(type))
     newBet.chosenTextOption = chosenTextOption;
   if (type === LO) newBet.chosenNumberOption = chosenNumberOption;
+
+  newBet.resultId = mostRecentUndoneResult._id;
 
   await newBet.save();
   return { id: newBet._id };
