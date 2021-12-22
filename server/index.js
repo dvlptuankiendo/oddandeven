@@ -63,13 +63,28 @@ const TIME_PER_BET = 120;
 let count = TIME_PER_BET;
 let isProcessing = false;
 
+const resultMessage = (result) => {
+  let text1 = "LẺ";
+  let text2 = "TÀI";
+
+  if (result % 2 === 0) text1 = "CHẴN";
+  if (result < 50) text2 = "XỈU";
+
+  return `Kết quả con số may mắn: ${result}. Chúc mừng các bạn đặt ${text1} và ${text2}`;
+};
+
 const countdown = () => {
   if (isProcessing) return;
   setTimeout(async () => {
     isProcessing = true;
     if (!count) {
-      await resultService.createNewResult();
+      const result = await resultService.createNewResult();
       socketIo.emit("newresult");
+      socketIo.emit("newmessage", {
+        sender: "Hệ thống",
+        text: resultMessage(result),
+        isSystem: true,
+      });
       count = TIME_PER_BET;
     } else {
       --count;
@@ -98,4 +113,4 @@ server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-rankingService.resetAmountPlayedToday()
+rankingService.resetAmountPlayedToday();

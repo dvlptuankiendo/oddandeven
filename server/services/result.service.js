@@ -198,7 +198,7 @@ const updateBettings = async (activeResult) => {
       }
       await user.save();
     }
-    const isWin = isWinEvenOddHighLow || isWinXien || isWinLo
+    const isWin = isWinEvenOddHighLow || isWinXien || isWinLo;
     betting.status = isWin ? WIN : LOSE;
     betting.resultId = activeResult;
     await betting.save();
@@ -221,6 +221,7 @@ const createNewResult = async () => {
   });
 
   await newResult.save();
+  return result;
 };
 
 export default { getResults, createNewResult };

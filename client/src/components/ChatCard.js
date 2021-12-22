@@ -50,7 +50,7 @@ const ChatCard = () => {
     setMessage("");
 
     socketRef.current.emit("message", {
-      sender: (user && user.username) || "Anonymous",
+      sender: (user && user.username) || "Vô danh",
       text: message,
       amount: (user && user.amount) || "",
     });
@@ -77,11 +77,20 @@ const ChatCard = () => {
               }}
             >
               <div className="mb-2 message-item">
-                <div className="d-flex align-items-center mb-2">
+                <div
+                  className="d-flex align-items-center mb-2"
+                  style={item.isSystem ? { color: "green" } : {}}
+                >
                   <FaUserAlt className="mr-2" />
                   {item.sender} {renderAmount(item)}
                 </div>
-                <div>{item.text}</div>
+                <div
+                  style={
+                    item.isSystem ? { color: "tomato", fontWeight: "bold" } : {}
+                  }
+                >
+                  {item.text}
+                </div>
               </div>
             </div>
           ))}
