@@ -124,8 +124,8 @@ const calculateResult = async (activeResult) => {
     profits.push({ key, profit: income - outcome });
   }
 
-  const sortedProfits = _.sortBy(profits, (p) => p.profit).reverse();
-  const maxProfit = sortedProfits[0];
+  const positiveProfits = profits.filter((p) => p.profit >= 0);
+  const maxProfit = _.sample(positiveProfits);
   const { key, profit } = maxProfit;
 
   const availableResults = RESULTS[key];
