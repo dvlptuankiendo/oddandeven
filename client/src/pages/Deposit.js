@@ -58,7 +58,7 @@ const Deposit = () => {
             </Col>
             <Col md={9}>
               {activeTab === 1 && <Momo getData={getData} />}
-              {activeTab === 2 && <TheSieuRe />}
+              {activeTab === 2 && <TheSieuRe getData={getData} />}
             </Col>
           </Row>
           <Row>

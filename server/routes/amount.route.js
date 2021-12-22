@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.post("/deposit/momo", auth, amountController.depositMomo);
 
+router.post("/deposit/tsr", auth, amountController.depositTSR);
+
 export default router;

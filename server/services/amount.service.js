@@ -1,12 +1,14 @@
 import axios from "axios";
 import _ from "lodash";
 import dotenv from "dotenv";
+import moment from "moment";
 
 import User from "../models/user.model.js";
 import {
   TRANSACTION_OPTIONS,
   TRANSACTION_PROVIDERS,
   MOMO_RATE,
+  TSR_RATE,
 } from "../utils/constants.js";
 
 dotenv.config();
@@ -71,6 +73,7 @@ const depositMomo = async (userId) => {
     if (!validTransactions.length)
       throw new Error("Vui lòng gửi tiền theo hướng dẫn rồi bấm Nạp tiền");
 
+    // update user amount && history
     const transactionIds = validTransactions.map((item) => item.ID);
     const totalAmount = _.sumBy(validTransactions, (i) => i.amount);
 
@@ -100,4 +103,75 @@ const depositMomo = async (userId) => {
   }
 };
 
-export default { depositMomo };
+const depositTSR = async (userId, code) => {
+  const user = await User.findOne({ _id: userId });
+  if (!user) throw new Exception("Bad request");
+
+  if (user.isProcessing)
+    throw new Error("Đang xử lý giao dịch. Vui lòng thử lại sau");
+
+  try {
+    user.isProcessing = true;
+    await user.save();
+
+    // get TSR transactions
+    const res = await axios.get(thesieureUrl);
+    const {
+      data: { tranList },
+    } = res;
+
+    // get last 1 hour transactions
+    const now = Date.now();
+    const miliSecondsIn1Hour = 1 * 60 * 60 * 1000;
+    const transactions = tranList.filter((item) => {
+      const itemDate = moment(item.date, "DD-MM-YYYY HH:mm:ss").toDate;
+      const time = new Date(itemDate).getTime();
+      return now - time <= miliSecondsIn1Hour;
+    });
+
+    // find user transactions
+    const existedTransactionIds = (user.history || [])
+      .filter((item) => item.type === DEPOSIT && item.provider === THESIEURE)
+      .map((item) => item.externalId)
+      .flat();
+
+    const validTransactions = transactions.filter((item) => {
+      return item.description === user.username && item.transId === code;
+    });
+
+    if (!validTransactions.length)
+      throw new Error("Vui lòng gửi tiền theo hướng dẫn rồi bấm Nạp tiền");
+
+    // update user amount && history
+    const transactionIds = validTransactions.map((item) => item.transId);
+    const totalAmount = _.sumBy(validTransactions, (i) =>
+      Number(i.amount.replace(/[^0-9]/g, ""))
+    );
+
+    const goldAmount = totalAmount * TSR_RATE;
+
+    const newDeposit = {
+      type: DEPOSIT,
+      provider: THESIEURE,
+      goldAmount,
+      amount: totalAmount,
+      externalId: transactionIds,
+    };
+
+    if (!user.history || !user.history.length) {
+      user.history = [newDeposit];
+    } else {
+      user.history.push(newDeposit);
+    }
+
+    user.amount = user.amount + goldAmount;
+    user.isProcessing = false;
+    await user.save();
+  } catch (err) {
+    user.isProcessing = false;
+    await user.save();
+    throw err;
+  }
+};
+
+export default { depositMomo, depositTSR };

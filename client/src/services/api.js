@@ -44,3 +44,6 @@ export const getRanking = () => api.get("/api/v1/ranking/daily");
 export const getHistory = () => api.get("/api/v1/account/history");
 
 export const depositMomo = () => api.post("/api/v1/amount/deposit/momo");
+
+export const depositTSR = (data) =>
+  api.post("/api/v1/amount/deposit/tsr", data);
