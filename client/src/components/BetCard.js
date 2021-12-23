@@ -266,10 +266,13 @@ const BetCard = () => {
           </Label>
           <Input
             placeholder="Nhập số tiền đặt cược"
-            type="number"
             disabled={isBlocked}
-            value={amount || ""}
-            onChange={(e) => setAmount(parseInt(e.target.value))}
+            value={formatAmount(amount) || ""}
+            onChange={(e) => {
+              const number =
+                parseInt(e.target.value.replace(/[^0-9]/g, "")) || 0;
+              setAmount(number);
+            }}
           />
         </div>
 
