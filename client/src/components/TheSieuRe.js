@@ -18,6 +18,7 @@ const TheSieuRe = ({ getData }) => {
       const res = await getInfo();
       setUser(res.data);
       getData();
+      setCode("");
       toast.success("Nạp vàng thành công");
     } catch (err) {
       toast.error((err.response && err.response.data.message) || err.message);
