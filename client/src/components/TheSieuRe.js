@@ -42,10 +42,10 @@ const TheSieuRe = ({ getData }) => {
       </Alert>
       <div>
         <Label>Tài khoản nhận</Label>
-        <Input className="mb-2" disabled value="tuantkna5"></Input>
+        <Input className="mb-2" disabled value="nrowin"></Input>
 
         <Label>Họ và tên</Label>
-        <Input className="mb-2" disabled value="Nguyễn Văn Tuấn"></Input>
+        <Input className="mb-2" disabled value="Hảo Khắc Toàn"></Input>
 
         <Label>Nội dung</Label>
         <Input className="mb-3" disabled value={user.username}></Input>
