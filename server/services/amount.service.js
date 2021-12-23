@@ -118,18 +118,7 @@ const depositTSR = async (userId, code) => {
 
     // get TSR transactions
     const res = await axios.get(thesieureUrl);
-    const {
-      data: { tranList },
-    } = res;
-
-    // get last 1 hour transactions
-    const now = Date.now();
-    const miliSecondsIn1Hour = 1 * 60 * 60 * 1000;
-    const transactions = tranList.filter((item) => {
-      const itemDate = moment(item.date, "DD-MM-YYYY HH:mm:ss").toDate;
-      const time = new Date(itemDate).getTime();
-      return now - time <= miliSecondsIn1Hour;
-    });
+    const { data } = res.data;
 
     // find user transactions
     const existedTransactionIds = (user.history || [])
@@ -137,17 +126,21 @@ const depositTSR = async (userId, code) => {
       .map((item) => item.externalId)
       .flat();
 
-    const validTransactions = transactions.filter((item) => {
-      return item.description === user.username && item.transId === code;
+    const validTransactions = data.filter((item) => {
+      return (
+        item.noidung === user.username &&
+        item.magd === code &&
+        !existedTransactionIds.includes(item.magd)
+      );
     });
 
     if (!validTransactions.length)
       throw new Error("Vui lòng gửi tiền theo hướng dẫn rồi bấm Nạp tiền");
 
     // update user amount && history
-    const transactionIds = validTransactions.map((item) => item.transId);
+    const transactionIds = validTransactions.map((item) => item.magd);
     const totalAmount = _.sumBy(validTransactions, (i) =>
-      Number(i.amount.replace(/[^0-9]/g, ""))
+      Number(i.sotien.replace(/[^0-9]/g, ""))
     );
 
     const goldAmount = totalAmount * TSR_RATE;
@@ -201,3 +194,16 @@ const requestWithdraw = async (userId, { provider, amount, address }) => {
 };
 
 export default { depositMomo, depositTSR, requestWithdraw };
+
+// const tsrDataStructure = {
+//   status: "1",
+//   msg: "Thành công",
+//   data: [
+//     {
+//       magd: "T61C32AA318752",
+//       sotien: "10000",
+//       noidung: "test123",
+//       loai: "cộng tiền",
+//     },
+//   ],
+// };

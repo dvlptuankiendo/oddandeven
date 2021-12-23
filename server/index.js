@@ -12,6 +12,8 @@ import rankingService from "./services/ranking.service.js";
 
 dotenv.config();
 
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
 // connect mongodb using mongoose
 const uri = process.env.MONGO_URI;
 mongoose.connect(uri, { autoIndex: true, autoCreate: true });

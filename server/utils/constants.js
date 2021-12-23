@@ -60,5 +60,5 @@ export const RESULTS = {
   ],
 };
 
-export const MOMO_RATE = 7600;
-export const TSR_RATE = 7600;
+export const MOMO_RATE = 10000;
+export const TSR_RATE = 10000;

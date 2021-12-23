@@ -15,5 +15,5 @@ services:
       - MONGO_URI=mongodb+srv://test:test@cluster0.qsrxo.mongodb.net/oddandeven?retryWrites=true&w=majority
       - ACCESS_TOKEN_SECRET_KEY=somerandomstring
       - JWT_ACCESS_TOKEN_LIFE=14d
-      - THE_SIEU_RE_URL=https://api.web2m.com/historyapithesieure/558194AF-0013-B634-9CDA-CDA630D857A9
+      - THE_SIEU_RE_URL=https://api.dailysieure.com/api-tsr/?taikhoan=nrowin&matkhau=0388760127t1
       - MOMO_URL=https://api.web2m.com/historyapimomo/E9565811-67A5-5422-FC40-C40BCDF292DB

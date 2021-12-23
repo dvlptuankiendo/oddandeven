@@ -28,9 +28,9 @@ const Momo = ({ getData }) => {
     <div className="p-3">
       <h4>NẠP TỪ VÍ MOMO</h4>
       <Alert color="success" className="mb-2">
-        <p className="text-danger font-weight-bold mb-1">Tỷ lệ nạp ví 7600%</p>
+        <p className="text-danger font-weight-bold mb-1">Tỷ lệ nạp ví 10000%</p>
         <p className="text-danger font-weight-bold mb-0">
-          Nạp 100k nhận 760tr vàng
+          Nạp 100k nhận 1 tỷ vàng
         </p>
         <p className="text-danger mb-0">
           Vui lòng gửi tiền vào tài khoản momo bên dưới theo đúng cú pháp, sau
